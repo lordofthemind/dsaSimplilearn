@@ -1,188 +1,98 @@
+// create a doublyLinkedList to store given values.
+//Also create another DoublyLinkedList to store factorial of value of previous DLL.
 #include <iostream>
 using namespace std;
 
-struct orgnl
+struct Node
 {
     int data;
-    struct orgnl *prev;
-    struct orgnl *next;
+    struct Node *prev;
+    struct Node *next;
 };
-struct orgnl *Head;
 
-// struct fctrl
-// {
-//     int fdata;
-//     struct fctrl *fprev;
-//     struct fctrl *fnext;
-// };
-// struct fctrl *fHead;
-
-
-void traverse()
+void traverse(Node *head)
 {
-    struct orgnl *current;
-    current = Head;
-    if (Head == NULL)
+    while (head != NULL)
     {
-        cout << "List is empty, nothing to print." << endl;
+        cout << head->data;
+        if (head->next != NULL)
+            cout << " <> ";
+        head = head->next;
     }
-    else
-    {
-        cout << "List is as follows..." << endl;
-        while (current != NULL)
-        {
-            cout << current->data;
-            if (current->next != NULL)
-            {
-                cout << " <> ";
-            }
-            current = current->next;
-        }
-        cout << endl;
-    }
+    cout << endl;
 }
 
-void Insert(int itm)
+void traverseRev(Node *head)
 {
-    struct orgnl *ptr, *trvrs;
-    ptr = (struct orgnl *)malloc(sizeof(struct orgnl));
-    if (ptr == NULL)
+    while (head->next != NULL)
+        head = head->next;
+    while (head->prev != NULL)
     {
-        cout << "Memory Full." << endl;
+        cout << head->data;
+        if (head->prev != NULL)
+            cout << " <> ";
+        head = head->prev;
     }
-    else
+    cout << head->data;
+    cout << endl;
+}
+
+void insert(Node **head, int itm)
+{
+    Node *nNode = new Node();
+    nNode->data = itm;
+    nNode->next = NULL;
+    if (*head == NULL)
     {
-        ptr->data = itm;
-        ptr->next = NULL;
-        if (Head == NULL)
-        {
-            ptr->prev = NULL;
-            Head = ptr;
-        }
-        else
-        {
-            trvrs = Head;
-            while (trvrs->next != NULL)
-            {
-                trvrs = trvrs->next;
-            }
-            trvrs->next = ptr;
-            ptr->prev = trvrs;
-        }
-        cout << "Element inserted in Doubly linked list." << endl;
+        *head = nNode;
+        nNode->prev = NULL;
+        return;
     }
+    Node *last = *head;
+    while (last->next != NULL)
+        last = last->next;
+    last->next = nNode;
+    last->next->prev = last;
 }
 
 int factorial(int n)
 {
     if (n == 0)
-    {
         return 1;
-    }
-    else
-    {
-        return n * factorial(n - 1);
-    }
+    return n * factorial(n - 1);
 }
 
 
-// void InsertFct(int itm)
-// {
-//     struct fctrl *fptr, *ftrvrs;
-//     fptr = (struct fctrl *)malloc(sizeof(struct fctrl));
-//     if (fptr == NULL)
-//     {
-//         cout << "Memory Full." << endl;
-//     }
-//     else
-//     {
-//         fptr->fdata = itm;
-//         fptr->fnext = NULL;
-//         if (Head == NULL)
-//         {
-//             fptr->fprev = NULL;
-//             fHead = fptr;
-//         }
-//         else
-//         {
-//             ftrvrs = fHead;
-//             while (ftrvrs->fnext != NULL)
-//             {
-//                 ftrvrs = ftrvrs->fnext;
-//             }
-//             ftrvrs->fnext = fptr;
-//             fptr->fprev = ftrvrs;
-//         }
-//         cout << "Element inserted in Factorial Doubly linked list." << endl;
-//     }
-// }
-
-
-void calcFact()
+void insrtFctrl(Node *head, Node **fctHead)
 {
-    struct orgnl *current;
-    current = Head;
-    int fct;
-    if (Head == NULL)
+    while (head != NULL)
     {
-        cout << "List is empty, nothing to calculate factorial." << endl;
-    }
-    else
-    {
-        cout << "Calculating Factorial" << endl;
-        while (current != NULL)
-        {
-            fct = factorial(current->data);
-            cout << fct;
-            if (current->next != NULL)
-            {
-                cout << " <> ";
-            }
-            current = current->next;
-        }
-        cout << endl;
+        int fct = factorial(head->data);
+        insert(fctHead, fct);
+        head = head->next;
     }
 }
-
-
-
-
-// void traverseFctrl()
-// {
-//     struct fctrl *fcurrent;
-//     fcurrent = fHead;
-//     if (fHead == NULL)
-//     {
-//         cout << "List is empty, nothing to print." << endl;
-//     }
-//     else
-//     {
-//         cout << "Factorial List: " << endl;
-//         while (fcurrent != NULL)
-//         {
-//             cout << fcurrent->fdata;
-//             if (fcurrent->fnext != NULL)
-//             {
-//                 cout << " <> ";
-//             }
-//             fcurrent = fcurrent->fnext;
-//         }
-//         cout << endl;
-//     }
-// }
-
-
-
 
 
 int main()
 {
-    Insert(0);
-    Insert(1);
-    Insert(2);
-    Insert(3);
-    Insert(4);
-    Insert(5);
-    traverse();
-    calcFact();
+    Node *head = NULL;
+    insert(&head, 0);
+    insert(&head, 1);
+    insert(&head, 2);
+    insert(&head, 3);
+    insert(&head, 4);
+    insert(&head, 5);
+    cout << "Original Doubly Linked list." << endl;
+    traverse(head);
+    cout << "Original Doubly Linked list in reverse." << endl;
+    traverseRev(head);
+    //Operations on factorial list!
+    Node *fctHead = NULL;
+    insrtFctrl(head, &fctHead);
+    cout << "Factorial Doubly Linked list." << endl;
+    traverse(fctHead);
+    cout << "Factorial Doubly Linked list in reverse." << endl;
+    traverseRev(fctHead);
+    return 0;
 }
