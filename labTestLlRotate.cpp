@@ -54,8 +54,6 @@ void rotate(node *head, int rt)
     struct node *trvr, *tHead;
     for (int i = 0; i < rt; i++)
     {
-        /* code */
-
         trvr = head;
         while (trvr->next != NULL)
             trvr = trvr->next;
