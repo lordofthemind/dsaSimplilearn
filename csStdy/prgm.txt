@@ -1,0 +1,4 @@
+<START>
+<READ> X </READ> 
+<DISPLAY> X </DISPLAY> 
+<START>
